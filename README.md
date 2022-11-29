@@ -16,6 +16,10 @@ There exists a simple set of tests for this file.
 
 The data files for the analyses are too big to include in this repo. Instead they can be found at the following links (warning, these links download directly and can be fairly large: a gig or more).
 
+### Gene Sets
+
+* http://www.gsea-msigdb.org/gsea/msigdb/download_file.jsp?filePath=/msigdb/release/7.4/msigdb_v7.4_files_to_download_locally.zip
+
 ### Thyroid Tissue Data
 
 * GSE86354_GTEx_FeatureCounts.samples.txt: https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE86354&format=file&file=GSE86354%5FGTEx%5FFeatureCounts%2Esamples%2Etxt%2Egz
