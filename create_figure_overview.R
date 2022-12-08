@@ -1,13 +1,14 @@
 source("gsea.R")
 library(ggplot2)
 library(ggpubr)
-
+library(latex2exp)
 
 n <- 60
 set.seed(12)
 lfc <- sort(rnorm(n), decreasing=T)
 set.seed(NULL)
-inds <- c(3,5,7,12,15,17,20,25,40,45,48,55)
+#inds <- c(3,5,7,12,15,17,20,25,40,45,48,55)
+inds <- c(3,5,7,10,14,16,20,23,40,45,48,55)
 in_set <- rep("Not In Set", n)
 in_set[inds] <- "In Set"
 
@@ -77,7 +78,7 @@ g1 <- g1 + xlab("Entity List Rank")
 g1 <- g1 + ylab("Log Fold Change")
 g1 <- g1 + scale_shape_manual(values=c(4, 21))
 g1 <- g1 + theme(legend.title=element_blank())
-g1 <- g1 + scale_colour_manual(labels=c("ε=-1", "ε=0", "ε=1"), values=c("#E69F00", "#000000", "#0072B2"))
+g1 <- g1 + scale_colour_manual(labels=c("ϵ=-1", "ϵ=0", "ϵ=1"), values=c("#E69F00", "#000000", "#0072B2"))
 g1 <- g1 + theme(legend.position="right") + theme(legend.direction='vertical')
 g1 <- g1 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 g1 <- g1 + scale_alpha_discrete(range=c(1,0.45))
@@ -104,6 +105,7 @@ g2 <- g2 + ylab("Running Sum")
 g2 <- g2 + scale_colour_manual(values=c("#E69F00", "#000000", "#0072B2"))
 g2 <- g2 + theme(legend.position = "none")
 g2 <- g2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+# #E69F00 orange, #000000 black, #0072B2 blue
 l <- paste0(round(res_1$obs_score, 2), " (", round(res_1$p_value, 2), ")")
 g2 <- g2 + annotate(geom="text", x=12, y=res_1$obs_score+0.05, label=l, color="#0072B2", hjust=0, size=3.5)
 l <- paste0(round(res_n1$obs_score, 2), " (", round(res_n1$p_value, 2), ")")
@@ -112,12 +114,17 @@ l <- paste0(round(res_0$obs_score, 2), " (", round(res_0$p_value, 2), ")")
 g2 <- g2 + annotate(geom="text", x=0, y=res_0$obs_score+0.09, label=l, color="#000000", hjust=0, size=3.5)
 g2 <- g2 + geom_segment(aes(x=25.5, y=res_1$obs_score+0.05, xend=27.5, yend=res_1$obs_score+0.05), arrow = arrow(length = unit(0.1, "cm")), color="#808080")
 g2 <- g2 + annotate(geom="text", x=28, y=res_1$obs_score+0.05, label="Enrichment Score (p-value)", color="#808080", hjust=0, size=3.5)
+#g2 <- g2 + annotate(geom="text", x=40, y=0.25, label=TeX("$\\phi_S$"), hjust=0, size=3.5, parse=T)
+g2 <- g2 + annotate(geom="text", x=42, y=0.34, label=TeX("$𝜙_S=1$"), hjust=0, size=3.5, parse=T, color="#0072B2")
+g2 <- g2 + annotate(geom="text", x=32, y=0.21, label=TeX("$𝜙_S=0$"), hjust=0, size=3.5, parse=T, color="#000000")
+g2 <- g2 + annotate(geom="text", x=48, y=-0.13, label=TeX("$𝜙_S=0$"), hjust=0, size=3.5, parse=T, color="#E69F00")
+
 print("PART B DONE")
 
 ### PART C ###
 
-perms <- replicate(10000, sample(1:length(lfc), length(inds), replace=F))
-perms_null <- replicate(5000, sample(1:length(lfc), length(inds), replace=F))
+perms <- replicate(1000, sample(1:length(lfc), length(inds), replace=F))
+perms_null <- replicate(500, sample(1:length(lfc), length(inds), replace=F))
 
 p_mat <- c()
 score_mat <- c()
@@ -153,7 +160,8 @@ for (i in 1:ncol(p_mat)) {
 ppvs
 g3 <- ggplot(data.frame(x=seq(-2, 2, 0.1), y=round(ppvs*100, 2)), aes(x=x,y=y)) + geom_line(size=2)
 g3 <- g3 + theme_Publication()
-g3 <- g3 + xlab(expression(bold(Error (epsilon))))
+#g3 <- g3 + xlab(expression(bold(Error(epsilon))))
+g3 <- g3 + xlab("ϵ")
 g3 <- g3 + ylab("PPV (%)")
 g3 <- g3 + geom_vline(xintercept=1, color="#0072B2", linetype="dashed", size=1.5)
 g3 <- g3 + geom_vline(xintercept=0, color="#000000", linetype="dashed", size=1.5)
