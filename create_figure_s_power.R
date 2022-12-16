@@ -32,7 +32,7 @@ theme_Publication <- function(base_size=14, base_family="helvetica") {
       
 }
 
-df <- read.table("figure_s3_table.txt", row.names=1, header=T)
+df <- read.table("./data/figure_s3_table.txt", row.names=1, header=T)
 dim(df)
 length(seq(-2,2,0.2))
 colnames(df) <- c("lfc_sens_testing", seq(-2,2,0.2))
@@ -48,8 +48,8 @@ power
 power_df <- data.frame(x=seq(-2,2,0.2), y=power)
 sum(df[,"lfc_sens_testing"])
 g <- ggplot(power_df, aes(x=x,y=y)) + geom_point() + geom_line()
-g <- g + ylab("Power (%)") + xlab(TeX("$\\epsilon$"))
+g <- g + ylab("Power (%)") + xlab("ϵ")
 g <- g + theme_Publication()
 g <- g + ylim(5,15)
-ggsave("~/data/output/figure_s3.png", g, units="in", width=6, height=4)
+ggsave("~/data/output/figure_power.png", g, units="in", width=6, height=4)
 
