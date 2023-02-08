@@ -48,12 +48,12 @@ g <- g + annotate("text", x=0, y=height-0.17, label=0, size=3.5, color="black")
 g <- g + geom_segment(x=mean(df$x), xend=-0.6, y=height+0.25, yend=height+0.25, arrow=arrow(length = unit(0.04, "npc"), ends="last"), color="#D81B60", size=0.75)
 g <- g + geom_segment(x=mean(df$x), xend=mean(df$x), y=height+0.08, yend=height+0.25, color="#D81B60", linetype="11", size=0.3)
 g <- g + geom_segment(x=-0.6, xend=-0.6, y=height+0.04, yend=height+0.25, color="#D81B60", linetype="11", size=0.3)
-g <- g + annotate("text", x=(mean(df$x)-0.6)/2, y=height+0.25+0.125, label=TeX("$\\vartheta_1=\\theta_1-mean(\\theta_1$,...,$\\theta_D)$"), hjust=0.5, size=3, color="#D81B60")
+g <- g + annotate("text", x=(mean(df$x)-0.6)/2, y=height+0.25+0.125, label=TeX("$\\vartheta_1=\\theta_1-mean(\\theta_1$,...,$\\theta_D)$"), hjust=0.5, size=3.5, color="#D81B60")
 
 g <- g + geom_segment(x=0, xend=-0.6, y=height-0.35, yend=height-0.35, arrow=arrow(length = unit(0.04, "npc"), ends="last"), color="#1E88E5", size=0.75)
 g <- g + geom_segment(x=0, xend=0, y=height-0.25, yend=height-0.35, color="#1E88E5", linetype="11", size=0.3)
 g <- g + geom_segment(x=-0.6, xend=-0.6, y=height-0.04, yend=height-0.35, color="#1E88E5", linetype="11", size=0.3)
-g <- g + annotate("text", x=(-0.6)/2, y=height-0.35-0.125, label=TeX("$\\theta_1$"), hjust=0.5, size=3, color="#1E88E5")
+g <- g + annotate("text", x=(-0.6)/2, y=height-0.35-0.125, label=TeX("$\\theta_1$"), hjust=0.5, size=3.5, color="#1E88E5")
 
 # Legend
 legend_offset <- -0.1
@@ -93,7 +93,7 @@ g <- g + theme(axis.line=element_blank(),
       panel.grid.minor=element_blank(),
       plot.background=element_blank(),
       plot.margin=margin(0, 0, 0, 0))
-ggsave("figure_gsea_clr_single.png", g, units="in", width=5, height=1.8)
+ggsave("~/data/output/figure_gsea_clr_single.png", g, units="in", width=5, height=1.8)
 ```
 
 ```{r}
@@ -138,15 +138,11 @@ g <- ggplot(df, aes(x=x,y=y,shape=l,color=l)) + theme_bw() +
 
 g <- g + annotate("text", x=-1.5, y=1.25, label=TeX("$\\theta_1$"), size=3.5, color=text_color) # Bottom
 g <- g + annotate("text", x=-1.8, y=offset_bot+0.1, label=TeX("$\\vartheta_1=\\theta_1-\\frac{1}{D} \\sum_{d=1}^D \\theta_d$"), size=3.5, color=text_color)
-g <- g + annotate("text", x=0, y=1.37, label=0, size=3.5, color=line_color) + annotate("text", x=0, y=offset_bot+0.37, label=0, size=3.5, color=line_color) # Top + Bottom
-#g <- g + annotate("text", x=4.7+legend_offset,y=y_extra[1], label="Not In Set", size=3)
-#g <- g + annotate("text", x=4.4+legend_offset,y=y_extra[2], label="In Set", size=3)
+g <- g + annotate("text", x=0, y=1.37, label=0, size=3.5, color=line_color) + annotate("text", x=0, y=offset_bot+0.37, label=0, size=3.5, color=line_color) # Top +
 
 g <- g + geom_segment(x=-1.51, xend=-1.425, y=1.32, yend=1.43, arrow=arrow(length = unit(0.03, "npc"), ends="last"), color=text_color)
 g <- g + geom_segment(x=-2.65, xend=-2.4, y=offset_bot+0.17, yend=offset_bot+0.43, arrow=arrow(length = unit(0.03, "npc"), ends="last"), color=text_color) # Bottom
 g <- g + scale_shape_manual(values=c(4,21))
-#g <- plot_bracket(g, 0.06, 1.625, -0.95, 0.8, expression(paste(italic(p), "=0.052")), color="#717171")
-#g <- plot_bracket(g, 0.06, offset_bot+0.625, -1.9, -0.15, expression(paste(italic(p), "=0.025")), color="#717171")
 g <- g + annotate("text", x=0, y=1.75, label="~underline('GSEA-LFC: p-value=0.052')", size=4, hjust=0.5, parse=T)
 g <- g + annotate("text", x=0, y=0.85, label="~underline('GSEA-CLR: p-value=0.013')", size=4, hjust=0.5, parse=T)
 
