@@ -3,6 +3,7 @@ library(ggplot2)
 library(gridExtra)
 library(ggpubr)
 library(extrafont)
+library(latex2exp)
 loadfonts()
 
 # True positive (\epsilon=0) p-value <=0.05 (\epsilon=X) p-value <=0.05, ES same
@@ -82,7 +83,7 @@ create_fig_2_line <- function(data) {
 	print(head(data))
 	g <- g + facet_grid(facets=D~Ds, labeller=label_bquote(cols=D[S]:.(Ds), rows=D:.(D)))
 	g <- g + theme(strip.text.x=element_text(family="Times", face="bold", size=13), strip.text.y=element_text(family="Times", face="bold", size=13))
-	g <- g + xlab("ϵ")
+	g <- g + xlab(TeX("$ϵ^\\perp$"))
 	g <- g + theme(legend.title=element_blank())
 	g <- g + theme(panel.grid.major = element_line(color="#dfdfdf", size=0.5))
 	g <- g + scale_shape_manual(values=c(21, 22, 23, 24), labels=c("Normal", "Uniform", "Left-skew", "Right-skew"))

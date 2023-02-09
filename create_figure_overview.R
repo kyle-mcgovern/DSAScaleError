@@ -12,6 +12,8 @@ inds <- c(3,5,7,10,14,16,20,23,40,45,48,55)
 in_set <- rep("Not In Set", n)
 in_set[inds] <- "In Set"
 
+set.seed(100)
+
 running_sum <- function(lfc, inds) {
 	gsea_hit <- rep(0, length(lfc))
 	gsea_hit[inds] <- abs(lfc[inds])/sum(abs(lfc[inds]))
@@ -22,7 +24,6 @@ running_sum <- function(lfc, inds) {
 }
 
 theme_Publication <- function(base_size=14, base_family="helvetica") {
-      library(grid)
       library(ggthemes)
       (theme_foundation(base_size=base_size, base_family=base_family)
        + theme(plot.title = element_text(face = "bold",
@@ -52,6 +53,14 @@ theme_Publication <- function(base_size=14, base_family="helvetica") {
       
 }
 
+theme_Pub2 <- function() {
+	t <- theme_bw() + theme(axis.title.y = element_text(angle=90,vjust =2))
+	t <- t + theme(axis.title = element_text(face = "bold", size=rel(1)))
+	t <- t + theme(axis.text=element_text(face="bold", size=10, color="black"))
+	t <- t + theme(axis.line = element_line(colour = "black"), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(), panel.background = element_blank()) 
+	t
+}
+
 scale_fill_Publication <- function(...){
       library(scales)
       discrete_scale("fill","Publication",manual_pal(values = c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
@@ -73,14 +82,15 @@ df <- rbind(df, data.frame(x=1:length(lfc), y=lfc+1, in_set=in_set, error="1"))
 df <- rbind(df, data.frame(x=1:length(lfc), y=lfc-1, in_set=in_set, error="-1"))
 g1 <- ggplot(df, aes(x=x, y=y, shape=in_set, color=error, alpha=in_set))
 g1 <- g1 + geom_hline(yintercept=0, color="grey", linetype="11", size=1) + geom_point(size=1.25, stroke=1.25)
-g1 <- g1 + theme_Publication()
+g1 <- g1 + theme_Pub2() # + theme_Publication()
 g1 <- g1 + xlab("Entity List Rank")
 g1 <- g1 + ylab("Log Fold Change")
 g1 <- g1 + scale_shape_manual(values=c(4, 21))
 g1 <- g1 + theme(legend.title=element_blank())
-g1 <- g1 + scale_colour_manual(labels=c("ϵ=-1", "ϵ=0", "ϵ=1"), values=c("#E69F00", "#000000", "#0072B2"))
+g1 <- g1 + scale_colour_manual(labels=c(TeX("$ϵ^\\perp=-1$", bold=T), TeX("$ϵ^\\perp=0$", bold=T), TeX("$ϵ^\\perp=1$", bold=T)), values=c("#E69F00", "#000000", "#0072B2"))
 g1 <- g1 + theme(legend.position="right") + theme(legend.direction='vertical')
 g1 <- g1 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+g1 <- g1 + theme(legend.text.align=0)
 g1 <- g1 + scale_alpha_discrete(range=c(1,0.45))
 print("PART A DONE")
 
@@ -99,7 +109,7 @@ df2 <- data.frame(x=c(running_sum(lfc, inds)$ind, running_sum(lfc+1, inds)$ind, 
 
 g2 <- ggplot(df, aes(x=x, y=y, color=error)) + geom_hline(yintercept=0, color="grey", linetype="dashed", size=1) + geom_line(size=1.75)
 g2 <- g2 + geom_segment(data=df2, aes(x=x, xend=x, y=0, yend=y, color=color), inherit.aes=F, linetype="dotted", size=1.5)
-g2 <- g2 + theme_Publication()
+g2 <- g2 + theme_Pub2() # + theme_Publication()
 g2 <- g2 + xlab("Entity List Rank")
 g2 <- g2 + ylab("Running Sum")
 g2 <- g2 + scale_colour_manual(values=c("#E69F00", "#000000", "#0072B2"))
@@ -159,9 +169,9 @@ for (i in 1:ncol(p_mat)) {
 }
 ppvs
 g3 <- ggplot(data.frame(x=seq(-2, 2, 0.1), y=round(ppvs*100, 2)), aes(x=x,y=y)) + geom_line(size=2)
-g3 <- g3 + theme_Publication()
+g3 <- g3 + theme_Pub2() + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) # + theme_Publication()
 #g3 <- g3 + xlab(expression(bold(Error(epsilon))))
-g3 <- g3 + xlab("ϵ")
+g3 <- g3 + xlab(TeX("$ϵ^\\perp$", bold=T))
 g3 <- g3 + ylab("PPV (%)")
 g3 <- g3 + geom_vline(xintercept=1, color="#0072B2", linetype="dashed", size=1.5)
 g3 <- g3 + geom_vline(xintercept=0, color="#000000", linetype="dashed", size=1.5)
