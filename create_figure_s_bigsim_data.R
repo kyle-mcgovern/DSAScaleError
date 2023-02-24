@@ -5,6 +5,8 @@ D <- c(500, 10000, 20000)
 epsilons <- seq(-2,2,0.2)
 dist_types <- c("norm", "uniform", "right_skew", "left_skew")
 
+set.seed(500)
+
 m <- c()
 for(ds in Ds) {
 	for(d in D) {
@@ -24,7 +26,7 @@ for(ds in Ds) {
 				lfc <- c(lfc, rep(0.1, d*0.9))
 				lfc <- lfc - mean(lfc)
 			}
-			rds_file <- paste0(ds, "_", d, "_", dist_type, ".RDS")
+			rds_file <- paste0("./data/", ds, "_", d, "_", dist_type, ".RDS")
 			saveRDS(lfc, rds_file)
 
 			null_inds <- replicate(5000, sample(1:length(lfc), ds, replace=F))
@@ -52,4 +54,4 @@ for(ds in Ds) {
 }
 
 colnames(m) <- c("dist_type", "ds", "d", "epsilon", "index", "p_value", "obs_score")
-write.table(m, "figure_s1_data.txt")
+write.table(m, "./data/figure_s1_data.txt")

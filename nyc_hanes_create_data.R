@@ -3,7 +3,7 @@ suppressPackageStartupMessages({
   library(dplyr)
   })
 
-NYC_HANES <- loadQiimeData(sas7bdat::read.sas7bdat("/home/km/work/GSEA_paper/DSAScaleError/nyc-hanes-datasets-and-resources-analytic-data-sets-sas-file.sas7bdat")) %>% annotateFactors(.)
+NYC_HANES <- loadQiimeData(sas7bdat::read.sas7bdat("nyc-hanes-datasets-and-resources-analytic-data-sets-sas-file.sas7bdat")) %>% annotateFactors(.)
 # Extract alternative smokers who also smoke cigarettes and remove them
 alt_smokers_cigarettes <- data.frame(sample_data(NYC_HANES)) %>% dplyr::filter(smokingstatus == 'Alternative smoker') %>% dplyr::filter(CIGARETTES == 'Yes') %>% dplyr::select(Burklab_ID) %>% t
 NYC_HANES <- prune_samples(!(sample_names(NYC_HANES) %in% alt_smokers_cigarettes), NYC_HANES)
@@ -69,6 +69,6 @@ sns_sFana <- (sns_ds %>% filter(X2=="F Anaerobic" | X2=="Aero / Facultative Anae
 sns_my.gs <- list(aero=sns_sAero, anae=sns_sAnae, fana=sns_sFana)
 design = model.matrix(~smokingstatus, data=data.frame(sample_data(NYC_HANES.sns)))
 x <- otu_table(NYC_HANES)[,colnames(otu_table(NYC_HANES))%in%row.names(design)]
-saveRDS(x, "~/data/output/smoking_vs_non_smoking.RDS")
-saveRDS(design[,2], "~/data/output/smoking_vs_non_smoking_categories.RDS")
-saveRDS(sns_my.gs, "~/data/output/smoking_vs_non_smoking_microbe_sets.RDS")
+saveRDS(x, "./data/smoking_vs_non_smoking.RDS")
+saveRDS(design[,2], "./data/smoking_vs_non_smoking_categories.RDS")
+saveRDS(sns_my.gs, "./data/smoking_vs_non_smoking_microbe_sets.RDS")

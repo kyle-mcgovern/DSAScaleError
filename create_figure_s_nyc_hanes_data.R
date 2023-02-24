@@ -1,5 +1,7 @@
 source("gsea.R")
 
+set.seed(200)
+
 gm_mean = function(x, na.rm=TRUE){
   exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
 }
@@ -14,9 +16,9 @@ calculate_W <- function(Y, X, lfc_column, epsilon) {
 	W
 }
 
-Y <- readRDS("~/data/output/smoking_vs_non_smoking.RDS")
-metadata <- readRDS("~/data/output/smoking_vs_non_smoking_categories.RDS")
-microbe_sets <- readRDS("~/data/output/smoking_vs_non_smoking_microbe_sets.RDS")
+Y <- readRDS("./data/smoking_vs_non_smoking.RDS")
+metadata <- readRDS("./data/smoking_vs_non_smoking_categories.RDS")
+microbe_sets <- readRDS("./data/smoking_vs_non_smoking_microbe_sets.RDS")
 
 X <- cbind(1, metadata)
 W <- calculate_W(Y+0.1, X, 2, 0)
@@ -45,13 +47,14 @@ row.names(obs_scores) <- names(path_inds)
 row.names(obs_p_vals) <- names(path_inds)
 colnames(obs_scores) <- error_range
 colnames(obs_p_vals) <- error_range
-write.table(obs_scores, "~/data/output/figure_s5_obs_scores_lfc.txt")
-write.table(obs_p_vals, "~/data/output/figure_s5_obs_p_vals_lfc.txt")
+write.table(obs_scores, "./data/figure_s5_obs_scores_lfc.txt")
+write.table(obs_p_vals, "./data/figure_s5_obs_p_vals_lfc.txt")
 
 # GSEA-LFC-S
 obs_scores <- c()
 obs_p_vals <- c()
 for(error in error_range) {
+	print(error)
 	noise <- X[,2] * error
 	noise_adj_W <- sweep(W, 2, noise, "+")
 	gsea_res <- gsea_parallel_matrix(noise_adj_W, X, path_inds, 2, 5000, cores=4)
@@ -62,7 +65,7 @@ row.names(obs_scores) <- names(path_inds)
 row.names(obs_p_vals) <- names(path_inds)
 colnames(obs_scores) <- seq(-1,1,0.05)
 colnames(obs_p_vals) <- seq(-1,1,0.05)
-write.table(obs_scores, "~/data/output/figure_s5_obs_scores_lfc_s.txt")
-write.table(obs_p_vals, "~/data/output/figure_s5_obs_p_vals_lfc_s.txt")
+write.table(obs_scores, "./data/figure_s5_obs_scores_lfc_s.txt")
+write.table(obs_p_vals, "./data/figure_s5_obs_p_vals_lfc_s.txt")
 
 

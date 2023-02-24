@@ -7,7 +7,6 @@ n <- 60
 set.seed(12)
 lfc <- sort(rnorm(n), decreasing=T)
 set.seed(NULL)
-#inds <- c(3,5,7,12,15,17,20,25,40,45,48,55)
 inds <- c(3,5,7,10,14,16,20,23,40,45,48,55)
 in_set <- rep("Not In Set", n)
 in_set[inds] <- "In Set"

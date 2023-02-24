@@ -36,12 +36,12 @@ create_ppv_matrix <- function(m) {
 	ppvs
 }
 
-#m <- read.table("./data/figure_s1_data.txt")
-#head(m)
-#ppv_mat <- create_ppv_matrix(m)
-#write.table(ppv_mat, "ppv_mat.txt")
+m <- read.table("./data/figure_s1_data.txt")
+head(m)
+ppv_mat <- create_ppv_matrix(m)
+write.table(ppv_mat, "./data/ppv_mat.txt")
 
-ppv_mat <- read.table("ppv_mat.txt")
+ppv_mat <- read.table("./data/ppv_mat.txt")
 ppv_mat
 
 theme_Publication <- function(base_size=14, base_family="helvetica") {
@@ -113,10 +113,10 @@ create_fig_2_samples <- function(RDS_path, shape, color, title) {
 }
 
 g1 <- create_fig_2_line(ppv_mat)
-g2 <- create_fig_2_samples("150_500_norm.RDS", 21, "#a6cee3", "Normal")
-g3 <- create_fig_2_samples("150_500_uniform.RDS", 22, "#1f78b4", "Uniform")
-g4 <- create_fig_2_samples("150_500_left_skew.RDS", 23, "#b2df8a", "Left-skew")
-g5 <- create_fig_2_samples("150_500_right_skew.RDS", 24, "#33a02c", "Right-skew")
+g2 <- create_fig_2_samples("./data/150_500_norm.RDS", 21, "#a6cee3", "Normal")
+g3 <- create_fig_2_samples("./data/150_500_uniform.RDS", 22, "#1f78b4", "Uniform")
+g4 <- create_fig_2_samples("./data/150_500_left_skew.RDS", 23, "#b2df8a", "Left-skew")
+g5 <- create_fig_2_samples("./data/150_500_right_skew.RDS", 24, "#33a02c", "Right-skew")
 
 #ggsave("~/data/output/figure_s1.png", g)
 g6 <- ggarrange(ggarrange(g2, g3, g4, g5, ncol=4), g1, labels=c("a", "b"), nrow=2, heights=c(0.8,2))

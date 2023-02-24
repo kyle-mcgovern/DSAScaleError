@@ -3,6 +3,8 @@
 library(fgsea)
 source("gsea.R")
 
+set.seed(2002)
+
 cores <- 47
 niter <- 5000
 
@@ -41,5 +43,5 @@ m
 
 m <- cbind(signif_lst, m)
 row.names(m) <- names(path_inds)
-write.table(m, "figure_s3_table.txt")
+write.table(m, "./data/figure_s3_table.txt")
 

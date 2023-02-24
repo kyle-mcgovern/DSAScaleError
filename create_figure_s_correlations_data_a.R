@@ -92,6 +92,8 @@ set.seed(100)
 permutations <- replicate(5000, unname(sample(X[,2], replace=F)))
 set.seed(NULL)
 
+set.seed(256)
+
 noise_vals <- seq(-0.25, 0.25, 0.05)
 
 for(noise_val in noise_vals) {
