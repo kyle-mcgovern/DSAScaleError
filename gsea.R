@@ -143,7 +143,7 @@ gsea_parallel_matrix <- function(S, X, inds, lfc_column, iterations=2000, permut
 	}
 
 	clusterCall(cl, function() { source("gsea_C.R") })
-	res <- foreach(j=1:iterations, .combine=rbind, .export=c("draw_shuffled_col", "ols_solution", "gsea_base_inds"), .packages="MASS") %dopar% {
+	res <- foreach(j=1:iterations, .combine=rbind, .export=c("draw_shuffled_col", "ols_solution", "gsea_base_inds", "draw_perm_col"), .packages="MASS") %dopar% {
 		if(is.null(permutation_matrix)) {
 			shuffled_lfc <- draw_shuffled_col(S, X, lfc_column)
 		} else {

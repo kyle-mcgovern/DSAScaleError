@@ -1,7 +1,7 @@
 library(fgsea)
 source("gsea.R")
 
-pathways <- gmtPathways("~/data/input/c2.all.v7.4.symbols.gmt")
+pathways <- gmtPathways("c2.all.v7.4.symbols.gmt")
 Y <- as.matrix(read.table("./data/breast_tumor_counts.txt", row.names=1))
 metadata <- read.table("./data/breast_tumor_metadata.txt", header=T)
 metadata[,2] <- factor(metadata[,2], level=c("Healthy", "Tumor"))
@@ -39,6 +39,8 @@ calculate_W <- function(Y, X, lfc_column, epsilon) {
 	W
 }
 
+set.seed(2456)
+
 W <- calculate_W(Y, X, 2, 0)
 obs_scores <- c()
 obs_p_vals <- c()
@@ -52,5 +54,5 @@ for(e in seq(-0.25,0.25,0.025)) {
 }
 row.names(obs_scores) <- names(path_inds)
 row.names(obs_p_vals) <- names(path_inds)
-write.table(obs_scores, "figure_s4_obs_scores.txt")
-write.table(obs_p_vals, "figure_s4_obs_p_vals.txt")
+write.table(obs_scores, "./data/figure_s4_obs_scores.txt")
+write.table(obs_p_vals, "./data/figure_s4_obs_p_vals.txt")

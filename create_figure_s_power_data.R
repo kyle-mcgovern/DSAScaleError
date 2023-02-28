@@ -5,7 +5,7 @@ source("gsea.R")
 
 set.seed(2002)
 
-cores <- 47
+cores <- 39
 niter <- 5000
 
 pathways <- gmtPathways("c2.all.v7.4.symbols.gmt")

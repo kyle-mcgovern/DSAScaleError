@@ -67,12 +67,12 @@ colnames(constant_df) <- c("CAMERA", "GSEA-LFC-S", "GSEA-CW-S")
 constant_df
 
 all_df <- data.frame()
-zeros_gsea <- read.table("./data/GSEA_LFC_C2_0_01.txt")
-zeros_camera <- read.table("./data/CAMERA_LFC_C2_0_01.txt")
+zeros_gsea <- read.table("./data/GSEA_LFC_C2_0.txt")
+zeros_camera <- read.table("./data/CAMERA_LFC_C2_0.txt")
 for(i in seq(0, 0.25, 0.025)) {
-	gsea_df <- read.table(paste0("./data/GSEA_LFC_C2_", i, "_01.txt"))
+	gsea_df <- read.table(paste0("./data/GSEA_LFC_C2_", i, ".txt"))
 	gsea_ppvs <- apply(gsea_df, 2, function(col) sum(col<=0.05&zeros_gsea<=0.05)/sum(zeros_gsea<=0.05))
-	camera_df <- read.table(paste0("./data/CAMERA_LFC_C2_", i, "_01.txt"))
+	camera_df <- read.table(paste0("./data/CAMERA_LFC_C2_", i, ".txt"))
 	camera_ppvs <- apply(camera_df, 2, function(col) sum(col<=0.05&zeros_camera<=0.05)/sum(zeros_camera<=0.05))
 	all_df <- rbind(all_df, data.frame(epsilon=i, ppv=gsea_ppvs*100, method="GSEA-LFC-S"))
 	all_df <- rbind(all_df, data.frame(epsilon=i, ppv=camera_ppvs*100, method="CAMERA"))
