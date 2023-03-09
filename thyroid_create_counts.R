@@ -14,11 +14,11 @@ NAT_thyroid_counts_filt <- NAT_thyroid_counts[paper_genes,]
 merged_counts <- merge(healthy_thyroid_counts_filt, NAT_thyroid_counts_filt, by="row.names", all=TRUE)
 row.names(merged_counts) <- merged_counts[,1]
 merged_counts <- merged_counts[,-1]
-biom_counts <- make_biom(merged_counts+0.1)
+biom_counts <- make_biom(merged_counts)
 write_biom(biom_counts, "thyroid_counts.biom")
 metadata <- data.frame(sampleid=c(thyroid_healthy_names,thyroid_NAT_names), condition=c(rep("Healthy", length(thyroid_healthy_names)), rep("NAT", length(thyroid_NAT_names))))
 write.table(metadata, "thyroid_metadata.txt", sep="\t", row.names=F, quote=F)
-#system("songbird multinomial --input-biom thyroid_counts.biom --metadata-file thyroid_metadata.txt --formula \"condition\" --epochs 5000 --summary-dir throid_songbird")
+system("songbird multinomial --input-biom thyroid_counts.biom --metadata-file thyroid_metadata.txt --formula \"condition\" --epochs 5000 --summary-dir throid_songbird")
 lfc <- read.table("./throid_songbird/differentials.tsv", header=T)
 write.table(lfc[,c(1,3)], "thyroid_lfc.rnk", col.names=F, quote=F, sep="\t", row.names=F)
 for(epsilon in seq(-1.2, 0.6, 0.05)) {
