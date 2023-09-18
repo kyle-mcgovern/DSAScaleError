@@ -21,7 +21,7 @@ write.table(metadata, "thyroid_metadata.txt", sep="\t", row.names=F, quote=F)
 system("songbird multinomial --input-biom thyroid_counts.biom --metadata-file thyroid_metadata.txt --formula \"condition\" --epochs 5000 --summary-dir throid_songbird")
 lfc <- read.table("./throid_songbird/differentials.tsv", header=T)
 write.table(lfc[,c(1,3)], "thyroid_lfc.rnk", col.names=F, quote=F, sep="\t", row.names=F)
-for(epsilon in seq(-1.2, 0.6, 0.05)) {
+for(epsilon in seq(-0.6, 1.2, 0.05)) {
   epsilon <- round(epsilon, 2)
   print(epsilon)
   if (epsilon < 0) {
@@ -35,11 +35,11 @@ for(epsilon in seq(-1.2, 0.6, 0.05)) {
   tmp_lfc <- lfc[,c(1,3)]
   tmp_lfc[,2] <- tmp_lfc[,2] + epsilon
   write.table(tmp_lfc, paste0(rnk_file, ".rnk"), col.names=F, quote=F, sep="\t", row.names=F, append=T)
-  cmd <- paste("~/GSEA_4.2.3/gsea-cli.sh GSEAPreranked -rnk", paste0(rnk_file, ".rnk"), "-gmx ~/data/input/h.all.v7.4.symbols.gmt -nperm 5000 -rpt_label", rnk_file, "-out thyroid_gsea \n")
+  cmd <- paste("~/GSEA_Linux_4.2.3/gsea-cli.sh GSEAPreranked -rnk", paste0(rnk_file, ".rnk"), "-gmx ~/data/input/h.all.v7.4.symbols.gmt -nperm 25000 -rpt_label", rnk_file, "-out thyroid_gsea \n")
   system(cmd)
 }
 all_data <- data.frame()
-for(epsilon in seq(-1.2, 0.6, 0.05)) {
+for(epsilon in seq(-0.6, 1.2, 0.05)) {
   epsilon <- round(epsilon, 2)
   if (epsilon < 0) {
     epsilon_n <- paste0("n", abs(epsilon))

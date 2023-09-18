@@ -1,7 +1,9 @@
 source("gsea.R")
 library(ggplot2)
 library(ggpubr)
+library(gridExtra)
 library(latex2exp)
+library(cowplot)
 
 n <- 60
 set.seed(12)
@@ -54,9 +56,10 @@ theme_Publication <- function(base_size=14, base_family="helvetica") {
 
 theme_Pub2 <- function() {
 	t <- theme_bw() + theme(axis.title.y = element_text(angle=90,vjust =2))
-	t <- t + theme(axis.title = element_text(face = "bold", size=rel(1)))
-	t <- t + theme(axis.text=element_text(face="bold", size=10, color="black"))
-	t <- t + theme(axis.line = element_line(colour = "black"), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(), panel.background = element_blank()) 
+	t <- t + theme(axis.title = element_text(face = "bold", size=12, family="Times"))
+	t <- t + theme(axis.text=element_text(size=12, color="black", family="Times"))
+	t <- t + theme(axis.line = element_line(colour = "black"), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(), panel.background = element_blank())
+	t <- t + theme(legend.text=element_text(size=12, family="Times"))
 	t
 }
 
@@ -80,13 +83,13 @@ df <- data.frame(x=1:length(lfc), y=lfc, in_set=in_set, error="0")
 df <- rbind(df, data.frame(x=1:length(lfc), y=lfc+1, in_set=in_set, error="1"))
 df <- rbind(df, data.frame(x=1:length(lfc), y=lfc-1, in_set=in_set, error="-1"))
 g1 <- ggplot(df, aes(x=x, y=y, shape=in_set, color=error, alpha=in_set))
-g1 <- g1 + geom_hline(yintercept=0, color="grey", linetype="11", size=1) + geom_point(size=1.25, stroke=1.25)
+g1 <- g1 + geom_hline(yintercept=0, color="grey", linetype="11", size=1) + geom_point(size=1, stroke=1)
 g1 <- g1 + theme_Pub2() # + theme_Publication()
 g1 <- g1 + xlab("Entity List Rank")
 g1 <- g1 + ylab("Log Fold Change")
 g1 <- g1 + scale_shape_manual(values=c(4, 21))
 g1 <- g1 + theme(legend.title=element_blank())
-g1 <- g1 + scale_colour_manual(labels=c(TeX("$ϵ^\\perp=-1$", bold=T), TeX("$ϵ^\\perp=0$", bold=T), TeX("$ϵ^\\perp=1$", bold=T)), values=c("#E69F00", "#000000", "#0072B2"))
+g1 <- g1 + scale_colour_manual(labels=c(TeX("$ϵ^\\perp=-1$"), TeX("$ϵ^\\perp=0$"), TeX("$ϵ^\\perp=1$")), values=c("#E69F00", "#000000", "#0072B2"))
 g1 <- g1 + theme(legend.position="right") + theme(legend.direction='vertical')
 g1 <- g1 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 g1 <- g1 + theme(legend.text.align=0)
@@ -116,17 +119,17 @@ g2 <- g2 + theme(legend.position = "none")
 g2 <- g2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 # #E69F00 orange, #000000 black, #0072B2 blue
 l <- paste0(round(res_1$obs_score, 2), " (", round(res_1$p_value, 2), ")")
-g2 <- g2 + annotate(geom="text", x=12, y=res_1$obs_score+0.05, label=l, color="#0072B2", hjust=0, size=3.5)
+g2 <- g2 + annotate(geom="text", x=12, y=res_1$obs_score+0.05, label=l, color="#0072B2", hjust=0, size=11/.pt, family="Times")
 l <- paste0(round(res_n1$obs_score, 2), " (", round(res_n1$p_value, 2), ")")
-g2 <- g2 + annotate(geom="text", x=40, y=res_n1$obs_score-0.01, label=l, color="#E69F00", hjust=0, size=3.5)
+g2 <- g2 + annotate(geom="text", x=40, y=res_n1$obs_score-0.01, label=l, color="#E69F00", hjust=0, size=11/.pt, family="Times")
 l <- paste0(round(res_0$obs_score, 2), " (", round(res_0$p_value, 2), ")")
-g2 <- g2 + annotate(geom="text", x=0, y=res_0$obs_score+0.09, label=l, color="#000000", hjust=0, size=3.5)
+g2 <- g2 + annotate(geom="text", x=0, y=res_0$obs_score+0.09, label=l, color="#000000", hjust=0, size=11/.pt, family="Times")
 g2 <- g2 + geom_segment(aes(x=25.5, y=res_1$obs_score+0.05, xend=27.5, yend=res_1$obs_score+0.05), arrow = arrow(length = unit(0.1, "cm")), color="#808080")
-g2 <- g2 + annotate(geom="text", x=28, y=res_1$obs_score+0.05, label="Enrichment Score (p-value)", color="#808080", hjust=0, size=3.5)
+g2 <- g2 + annotate(geom="text", x=28, y=res_1$obs_score+0.05, label="Enrichment Score (p-value)", color="#808080", hjust=0, size=11/.pt, family="times")
 #g2 <- g2 + annotate(geom="text", x=40, y=0.25, label=TeX("$\\phi_S$"), hjust=0, size=3.5, parse=T)
-g2 <- g2 + annotate(geom="text", x=42, y=0.34, label=TeX("$𝜙_S=1$"), hjust=0, size=3.5, parse=T, color="#0072B2")
-g2 <- g2 + annotate(geom="text", x=32, y=0.21, label=TeX("$𝜙_S=0$"), hjust=0, size=3.5, parse=T, color="#000000")
-g2 <- g2 + annotate(geom="text", x=48, y=-0.13, label=TeX("$𝜙_S=0$"), hjust=0, size=3.5, parse=T, color="#E69F00")
+g2 <- g2 + annotate(geom="text", x=42, y=0.34, label=TeX("$𝜙_S=1$"), hjust=0, size=11/.pt, parse=T, color="#0072B2", family="Times")
+g2 <- g2 + annotate(geom="text", x=32, y=0.21, label=TeX("$𝜙_S=0$"), hjust=0, size=11/.pt, parse=T, color="#000000", family="Times")
+g2 <- g2 + annotate(geom="text", x=48, y=-0.13, label=TeX("$𝜙_S=0$"), hjust=0, size=11/.pt, parse=T, color="#E69F00", family="Times")
 
 print("PART B DONE")
 
@@ -167,14 +170,30 @@ for (i in 1:ncol(p_mat)) {
   ppvs <- c(ppvs, ppv)
 }
 ppvs
-g3 <- ggplot(data.frame(x=seq(-2, 2, 0.1), y=round(ppvs*100, 2)), aes(x=x,y=y)) + geom_line(size=2)
+g3 <- ggplot(data.frame(x=seq(-2, 2, 0.1), y=round(ppvs*100, 2)), aes(x=x,y=y)) + geom_line(size=1.5)
 g3 <- g3 + theme_Pub2() + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank()) # + theme_Publication()
 #g3 <- g3 + xlab(expression(bold(Error(epsilon))))
 g3 <- g3 + xlab(TeX("$ϵ^\\perp$", bold=T))
 g3 <- g3 + ylab("PPV (%)")
-g3 <- g3 + geom_vline(xintercept=1, color="#0072B2", linetype="dashed", size=1.5)
-g3 <- g3 + geom_vline(xintercept=0, color="#000000", linetype="dashed", size=1.5)
-g3 <- g3 + geom_vline(xintercept=-1, color="#E69F00", linetype="dashed", size=1.5)
+g3 <- g3 + geom_vline(xintercept=1, color="#0072B2", linetype="dotted", size=1.2)
+g3 <- g3 + geom_vline(xintercept=0, color="#000000", linetype="dotted", size=1.2)
+g3 <- g3 + geom_vline(xintercept=-1, color="#E69F00", linetype="dotted", size=1.2)
 
 g4 <- ggarrange(g1, ggarrange(g2, g3, ncol=2, labels=c("b", "c"), widths = c(1, 0.75)), labels="a", nrow=2)
-ggsave("~/data/output/overview.png", g4, units="in", width=7.5, height=5.5, dpi=400)
+#g4 <- grid.arrange(g1, arrangeGrob(g2, g3, ncol=2, labels=c("b", "c"), widths = c(1, 0.75)), labels="a", nrow=2)
+#gt <- arrangeGrob(g1,                               # bar plot spaning two columns
+#             g2, g3,                               # box plot and scatter plot
+#             ncol = 2, nrow = 2, 
+#             layout_matrix = rbind(c(1,1), c(2,3)))
+#p <- as_ggplot(gt) +                                # transform to a ggplot
+#  draw_plot_label(label = c("A", "B", "C"), size = 15,
+#                  x = c(0, 0, 0.5), y = c(1, 0.5, 0.5)) # Add labels     
+#ggsave("~/data/output/overview.png", g4, units="px", width=2250, height=528, dpi=300)
+print("stuff")
+#p <- ggdraw() +
+#  draw_plot(g1, 0, .5, 1, .5) +
+#  draw_plot(g2, 0, 0, .5, .5) +
+#  draw_plot(g3, .5, 0, .5, .5) +
+#  draw_plot_label(c("A", "B", "C"), c(0, 0, 0.5), c(1, 0.5, 0.5), size = 15)
+#print("wiggle")
+ggsave("~/data/output/Fig1.svg", g4, units="in", width=6.25, height=4.25, dpi=600)
